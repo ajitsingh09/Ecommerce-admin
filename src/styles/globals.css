@@ -25,3 +25,26 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.btn-primary {
+  @apply bg-blue-950 text-white p-2 rounded-lg px-3;
+}
+
+input,
+textarea,
+select {
+  @apply border border-gray-400 rounded-sm px-1 w-full py-2 px-3;
+  @apply mb-2;
+}
+input:focus,
+textarea:focus,
+select:focus {
+  @apply border-blue-900;
+}
+
+h1 {
+  @apply text-gray-800 mb-4 text-xl;
+}
+label {
+  @apply text-gray-600 text-sm;
+}
