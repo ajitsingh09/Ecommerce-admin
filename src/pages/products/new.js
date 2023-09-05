@@ -1,8 +1,10 @@
 import Layout from "@/components/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 const NewProduct = () => {
+  const router = useRouter();
   const [productDetails, setProductDetails] = useState({
     name: "",
     description: "",
@@ -15,7 +17,12 @@ const NewProduct = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     console.log("data sending...", productDetails);
-    // let res=await axios.post("/api/add-products",productDetails)
+    let res = await axios.post("/api/products", productDetails);
+    if (res) {
+      console.log(res);
+      console.log(res.data);
+      router.push("/products");
+    }
   };
 
   return (
