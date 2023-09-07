@@ -21,7 +21,7 @@ export default function ProductDetail() {
       <h1>
         <b>Edit Product</b>
       </h1>
-      <ProductForm {...productInfo} />
+      {productInfo && <ProductForm {...productInfo} />}
     </Layout>
   );
 }

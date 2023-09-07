@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import Modal from "@/components/parts/product/Modal";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -6,6 +7,11 @@ import { useEffect, useState } from "react";
 const Products = () => {
   const router = useRouter();
   const [products, setProducts] = useState([]);
+  const [showModal, setShowModal] = useState({
+    state: false,
+    id: null,
+    name: "",
+  });
 
   useEffect(() => {
     const getData = async () => {
@@ -16,6 +22,25 @@ const Products = () => {
     };
     getData();
   }, []);
+
+  const deleteProduct = async () => {
+    try {
+      if (!showModal.id) return;
+      let resp = await axios.delete("/api/products?id=" + showModal.id);
+      if (resp?.data?.success) {
+        setProducts(resp.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowModal({ state: false, id: null, name: "" });
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal({ state: false, id: null, name: "" });
+    console.log("modal closed");
+  };
 
   return (
     <Layout>
@@ -61,9 +86,15 @@ const Products = () => {
                     </svg>
                     Edit
                   </Link>
-                  <Link
-                    className="btn-red"
-                    href={"/products/delete/" + product._id}
+                  <button
+                    className="btn-red inline-flex items-center gap-1"
+                    onClick={() => {
+                      setShowModal({
+                        state: true,
+                        id: product._id,
+                        name: product.name,
+                      });
+                    }}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -80,13 +111,22 @@ const Products = () => {
                       />
                     </svg>
                     Delete
-                  </Link>
+                  </button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <div className="relative">
+        {showModal.state && (
+          <Modal
+            closeModal={closeModal}
+            deleteProduct={deleteProduct}
+            productName={showModal.name}
+          />
+        )}
+      </div>
     </Layout>
   );
 };

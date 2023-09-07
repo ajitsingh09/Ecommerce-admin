@@ -13,13 +13,36 @@ export default function ProductForm({ _id, name, description, price }) {
   const handleOnChange = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
   };
+
+  const addProduct = async () => {
+    try {
+      let res = await axios.post("/api/products", productDetails);
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const editProduct = async () => {
+    try {
+      let res = await axios.put("/api/products", { ...productDetails, _id });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     console.log("data sending...", productDetails);
-    let res = await axios.post("/api/products", productDetails);
-    if (res) {
-      console.log(res);
-      console.log(res.data);
+    let resp = null;
+    if (_id) {
+      //update product...
+      resp = await editProduct();
+    } else {
+      //add product...
+      resp = await addProduct();
+    }
+    if (resp?.data) {
       router.push("/products");
     }
   };

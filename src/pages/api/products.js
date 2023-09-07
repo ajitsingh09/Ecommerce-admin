@@ -17,11 +17,34 @@ export default async function handler(req, res) {
 
   if (method === "POST") {
     const { name, description, price } = req.body;
-    const productDetail = await Product.create({
+    await Product.create({
       name,
       description,
       price,
     });
-    res.json(productDetail);
+    res.json(true);
+  }
+
+  if (method === "PUT") {
+    const { name, description, price, _id } = req.body;
+    await Product.updateOne(
+      { _id },
+      {
+        name,
+        description,
+        price,
+      },
+    );
+    res.json(true);
+  }
+  if (method === "DELETE") {
+    const id = req.query?.id;
+    if (id) {
+      await Product.deleteOne({ _id: id });
+      let data = await Product.find();
+      res.json({ success: true, data: data });
+    } else {
+      res.json({ success: false });
+    }
   }
 }
