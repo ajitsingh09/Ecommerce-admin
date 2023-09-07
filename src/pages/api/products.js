@@ -1,15 +1,18 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 import { mongooseConnect } from "@/lib/mongoose";
-import { Product } from "@/modals/product";
+import { Product } from "@/modals/Product";
 
 export default async function handler(req, res) {
   const { method } = req;
   await mongooseConnect();
 
   if (method === "GET") {
-    console.log("data fetching....");
-    res.json(await Product.find());
+    if (req.query?.id) {
+      res.json(await Product.findOne({ _id: req.query.id }));
+    } else {
+      res.json(await Product.find());
+    }
   }
 
   if (method === "POST") {

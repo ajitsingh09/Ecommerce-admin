@@ -10,7 +10,7 @@ const Nav = () => {
     inActiveLink + " bg-white text-blue-900 rounded-es-md rounded-ss-md";
 
   return (
-    <aside className="h-screen flex flex-col text-white w-52 p-4 pr-0 gap-2 pt-6">
+    <aside className="h-screen flex flex-col text-white w-56 min-w-[13rem] p-4 pr-0 gap-2 pt-6">
       <div>
         <div className="bg-white content-[''] h-1">
           <div
