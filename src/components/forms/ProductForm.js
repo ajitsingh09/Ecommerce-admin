@@ -24,10 +24,10 @@ export default function ProductForm({ _id, name, description, price, images }) {
         data.append("file", file);
       }
 
-      // const res=await axios.post('api/upload',data)
-      // if(res){
-      //   console.log(res)
-      // }
+      const res = await axios.post("/api/upload", data);
+      if (res) {
+        console.log(res?.data);
+      }
     }
   };
 
