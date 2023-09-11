@@ -1,4 +1,5 @@
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -25,8 +26,12 @@ export default function ProductForm({ _id, name, description, price, images }) {
       }
 
       const res = await axios.post("/api/upload", data);
-      if (res) {
+      if (res?.data) {
         console.log(res?.data);
+        setProductDetails({
+          ...productDetails,
+          images: [...productDetails.images, ...res.data.links],
+        });
       }
     }
   };
@@ -83,28 +88,44 @@ export default function ProductForm({ _id, name, description, price, images }) {
         placeholder="Description"
       />
       <label htmlFor="images">Images:</label>
-      <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary mb-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-          />
-        </svg>
 
-        <div>Add image</div>
-        <input
-          type="file"
-          onChange={handleUploadImages}
-          className="opacity-0 top-0 absolute w-24 h-24 z-20 "
-        />
+      <div className="flex flex-row flex-wrap mt-1 gap-2">
+        <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary mb-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+            />
+          </svg>
+
+          <div>Add image</div>
+          <input
+            type="file"
+            onChange={handleUploadImages}
+            className="opacity-0 top-0 absolute w-24 h-24 z-20 "
+          />
+        </div>
+        {productDetails.images.length > 0 ? (
+          productDetails.images.map((img) => {
+            return (
+              <div className="w-24 h-24" key={img}>
+                <img className="w-full h-full" src={img} alt={img} />
+              </div>
+            );
+          })
+        ) : (
+          <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-slate-300 shadow-sm border border-primary">
+            No images uploaded
+          </div>
+        )}
       </div>
       <label htmlFor="price">Product Price:</label>
       <input
