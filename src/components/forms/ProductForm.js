@@ -1,5 +1,4 @@
 import axios from "axios";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -115,9 +114,10 @@ export default function ProductForm({ _id, name, description, price, images }) {
         </div>
         {productDetails.images.length > 0 ? (
           productDetails.images.map((img) => {
+
             return (
               <div className="w-24 h-24" key={img}>
-                <img className="w-full h-full" src={img} alt={img} />
+                <img className="w-full h-full bg-slate-300 " src={img} alt={img} />
               </div>
             );
           })

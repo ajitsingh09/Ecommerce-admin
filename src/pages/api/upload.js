@@ -2,7 +2,7 @@ import multiparty from "multiparty";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import fs from "fs";
 import mime from "mime-types";
-const BUCKETNAME = "ajit-next-ecommerce";
+const BUCKETNAME = "ajit-next-ecommerce-new";
 export default async function handler(req, res) {
   console.log("image uploading...");
   let form = new multiparty.Form();
