@@ -7,6 +7,7 @@ const ProductSchema = new Schema({
     type: String,
   },
   price: { type: Number, required: true },
+  images: [{ type: String }],
 });
 
 export const Product = models.Product || model("Product", ProductSchema);

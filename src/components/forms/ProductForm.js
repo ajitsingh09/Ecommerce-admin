@@ -1,6 +1,9 @@
+"use client";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Spinner from "../parts/product/Spinner";
+import { ReactSortable } from "react-sortablejs";
 
 export default function ProductForm({ _id, name, description, price, images }) {
   const router = useRouter();
@@ -10,6 +13,7 @@ export default function ProductForm({ _id, name, description, price, images }) {
     price: price || "",
     images: images || [],
   });
+  const [uploadingImages, setUploadingImages] = useState(false);
 
   const handleOnChange = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
@@ -17,22 +21,28 @@ export default function ProductForm({ _id, name, description, price, images }) {
 
   const handleUploadImages = async (e) => {
     console.log("files", e.target.files);
-    let files = e.target.files;
-    if (files.length > 0) {
-      const data = new FormData();
-      for (let file of files) {
-        data.append("file", file);
-      }
+    setUploadingImages(true);
+    try {
+      let files = e.target.files;
+      if (files.length > 0) {
+        const data = new FormData();
+        for (let file of files) {
+          data.append("file", file);
+        }
 
-      const res = await axios.post("/api/upload", data);
-      if (res?.data) {
-        console.log(res?.data);
-        setProductDetails({
-          ...productDetails,
-          images: [...productDetails.images, ...res.data.links],
-        });
+        const res = await axios.post("/api/upload", data);
+        if (res?.data) {
+          console.log(res?.data);
+          setProductDetails({
+            ...productDetails,
+            images: [...productDetails.images, ...res.data.links],
+          });
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
+    setUploadingImages(false);
   };
 
   const addProduct = async () => {
@@ -50,6 +60,13 @@ export default function ProductForm({ _id, name, description, price, images }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const changeImageOrder = (images) => {
+    setProductDetails({
+      ...productDetails,
+      images: [...images],
+    });
   };
 
   const handleOnSubmit = async (e) => {
@@ -113,17 +130,31 @@ export default function ProductForm({ _id, name, description, price, images }) {
           />
         </div>
         {productDetails.images.length > 0 ? (
-          productDetails.images.map((img) => {
-
-            return (
-              <div className="w-24 h-24" key={img}>
-                <img className="w-full h-full bg-slate-300 " src={img} alt={img} />
-              </div>
-            );
-          })
+          <ReactSortable
+            list={productDetails.images}
+            className="flex flex-wrap flex-row gap-1"
+            setList={changeImageOrder}
+          >
+            {productDetails.images.map((img) => {
+              return (
+                <div className="w-24 h-24" key={img}>
+                  <img
+                    className="w-full h-full bg-slate-300 "
+                    src={img}
+                    alt={img}
+                  />
+                </div>
+              );
+            })}
+          </ReactSortable>
         ) : (
           <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-slate-300 shadow-sm border border-primary">
             No images uploaded
+          </div>
+        )}
+        {uploadingImages && (
+          <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm">
+            <Spinner />
           </div>
         )}
       </div>

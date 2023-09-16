@@ -4,7 +4,6 @@ import fs from "fs";
 import mime from "mime-types";
 const BUCKETNAME = "ajit-next-ecommerce-new";
 export default async function handler(req, res) {
-  console.log("image uploading...");
   let form = new multiparty.Form();
   try {
     let { files } = await new Promise((resolve, reject) => {
@@ -26,14 +25,15 @@ export default async function handler(req, res) {
       let ext = file.originalFilename.split(".").pop();
       let newfilename =
         file.originalFilename.split(".")[0] + Date.now() + "." + ext;
-      client.send(
+
+      await client.send(
         new PutObjectCommand({
           Bucket: BUCKETNAME,
           Key: newfilename,
           Body: fs.readFileSync(file.path),
           ACL: "public-read",
           ContentType: mime.lookup(file.path),
-        }),
+        })
       );
       const link = `https://${BUCKETNAME}.s3.amazonaws.com/${newfilename}`;
       links.push(link);
