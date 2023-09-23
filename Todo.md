@@ -6,5 +6,8 @@
 # Mid Priority
 
 - Make Upload Image UI more appealing
+- Add Custom Alert
 
 # Low Priority
+
+- make the modal animation smooth
