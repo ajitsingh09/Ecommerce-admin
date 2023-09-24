@@ -2,10 +2,12 @@
 
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/modals/Product";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const { method } = req;
   await mongooseConnect();
+  await isAdminRequest(req, res);
 
   if (method === "GET") {
     if (req.query?.id) {
@@ -16,18 +18,20 @@ export default async function handler(req, res) {
   }
 
   if (method === "POST") {
-    const { name, description, price, images } = req.body;
+    const { name, description, price, images, category, properties } = req.body;
     await Product.create({
       name,
       description,
       price,
       images,
+      category,
+      properties
     });
     res.json(true);
   }
 
   if (method === "PUT") {
-    const { name, description, price, _id, images } = req.body;
+    const { name, description, price, _id, images, category, properties } = req.body;
     await Product.updateOne(
       { _id },
       {
@@ -35,6 +39,8 @@ export default async function handler(req, res) {
         description,
         price,
         images,
+        category,
+        properties
       },
     );
     res.json(true);

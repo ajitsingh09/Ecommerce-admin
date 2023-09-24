@@ -66,8 +66,8 @@ table.basic a {
 
 .btn-default,
 .btn-red {
-  @apply bg-red-200 text-red-600 px-4 py-1 rounded-sm shadow-sm;
+  @apply bg-red-200 text-red-600 px-4 py-2 rounded-sm shadow-sm;
 }
 .btn-default {
-  @apply bg-white text-gray-800 px-4 py-1 rounded-sm border border-gray-200 shadow-sm;
+  @apply bg-white text-gray-800 px-4 py-2 rounded-sm border border-gray-200 shadow-sm;
 }

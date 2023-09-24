@@ -24,7 +24,7 @@ export default function Layout({ children }) {
   return (
     <div className="flex bg-blue-600 text-black h-screen w-screen">
       <Nav />
-      <div className=" bg-white flex-grow m-2 ml-0 rounded-md p-4">
+      <div className=" bg-white flex-grow m-2 ml-0 rounded-md p-4 overflow-auto">
         {children}
       </div>
     </div>

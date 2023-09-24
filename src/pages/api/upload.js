@@ -2,8 +2,10 @@ import multiparty from "multiparty";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import fs from "fs";
 import mime from "mime-types";
+import { isAdminRequest } from "./auth/[...nextauth]";
 const BUCKETNAME = "ajit-next-ecommerce-new";
 export default async function handler(req, res) {
+  await isAdminRequest(req, res);
   let form = new multiparty.Form();
   try {
     let { files } = await new Promise((resolve, reject) => {
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
           Body: fs.readFileSync(file.path),
           ACL: "public-read",
           ContentType: mime.lookup(file.path),
-        }),
+        })
       );
       const link = `https://${BUCKETNAME}.s3.amazonaws.com/${newfilename}`;
       links.push(link);

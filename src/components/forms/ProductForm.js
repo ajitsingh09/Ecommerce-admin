@@ -1,19 +1,36 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "../parts/product/Spinner";
 import { ReactSortable } from "react-sortablejs";
 
-export default function ProductForm({ _id, name, description, price, images }) {
+export default function ProductForm({
+  _id,
+  name,
+  description,
+  price,
+  images,
+  category,
+  properties,
+}) {
   const router = useRouter();
   const [productDetails, setProductDetails] = useState({
     name: name || "",
     description: description || "",
     price: price || "",
     images: images || [],
+    category: category || "",
+    properties: properties || {},
   });
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/categories").then((result) => {
+      setCategories(result.data);
+    });
+  }, []);
 
   const handleOnChange = (e) => {
     setProductDetails({ ...productDetails, [e.target.name]: e.target.value });
@@ -85,6 +102,27 @@ export default function ProductForm({ _id, name, description, price, images }) {
     }
   };
 
+  function setProductProp(propName, value) {
+    setProductDetails((prev) => ({
+      ...prev,
+      properties: { ...prev.properties, [propName]: value },
+    }));
+  }
+
+  const propertiesToFill = [];
+  if (categories.length > 0 && productDetails.category) {
+    let catInfo = categories.find(({ _id }) => _id === productDetails.category);
+    propertiesToFill.push(...catInfo.properties);
+    while (catInfo?.parent?._id) {
+      const parentCat = categories.find(
+        ({ _id }) => _id === catInfo?.parent?._id
+      );
+      propertiesToFill.push(...parentCat.properties);
+      catInfo = parentCat;
+    }
+  }
+  console.log("properties to fill", propertiesToFill);
+
   return (
     <form onSubmit={handleOnSubmit}>
       <label htmlFor="title">Product Name:</label>
@@ -95,6 +133,38 @@ export default function ProductForm({ _id, name, description, price, images }) {
         onChange={handleOnChange}
         placeholder="Product Name"
       />
+      <label>Category</label>
+      <select
+        name="category"
+        value={productDetails.category}
+        onChange={handleOnChange}
+      >
+        <option value="">Uncategorized</option>
+        {categories.length > 0 &&
+          categories.map((c) => (
+            <option key={c._id} value={c._id}>
+              {c.name}
+            </option>
+          ))}
+      </select>
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((p) => (
+          <div key={p.name} className="">
+            <label className="capitalize">{p.name}</label>
+            <div>
+              <select
+                value={productDetails.properties[p.name]}
+                onChange={(ev) => setProductProp(p.name, ev.target.value)}
+              >
+                {p.values.map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        ))}
       <label htmlFor="description">Product Description:</label>
       <textarea
         type="text"
@@ -102,11 +172,12 @@ export default function ProductForm({ _id, name, description, price, images }) {
         value={productDetails.description}
         onChange={handleOnChange}
         placeholder="Description"
+        className="m-0"
       />
       <label htmlFor="images">Images:</label>
 
       <div className="flex flex-row flex-wrap mt-1 gap-2">
-        <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary mb-2">
+        <div className="relative w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

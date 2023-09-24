@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 const Nav = () => {
   const router = useRouter();
@@ -9,14 +10,17 @@ const Nav = () => {
   const activeLink =
     inActiveLink + " bg-white text-blue-900 rounded-es-md rounded-ss-md";
 
+  async function logout() {
+    await router.push("/");
+    await signOut();
+  }
   return (
     <aside className="h-screen flex flex-col text-white w-56 min-w-[13rem] p-4 pr-0 gap-2 pt-6">
       <div>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "" ? "rounded-ee-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "" ? "rounded-ee-md" : "rounded-none"
+              }`}
           ></div>
         </div>
         <Link
@@ -41,18 +45,16 @@ const Nav = () => {
         </Link>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "" ? "rounded-se-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "" ? "rounded-se-md" : "rounded-none"
+              }`}
           ></div>
         </div>
       </div>
       <div>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "products" ? "rounded-ee-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "products" ? "rounded-ee-md" : "rounded-none"
+              }`}
           ></div>
         </div>{" "}
         <Link
@@ -77,9 +79,8 @@ const Nav = () => {
         </Link>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "products" ? "rounded-se-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "products" ? "rounded-se-md" : "rounded-none"
+              }`}
           ></div>
         </div>
       </div>
@@ -87,9 +88,8 @@ const Nav = () => {
       <div>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "categories" ? "rounded-ee-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "categories" ? "rounded-ee-md" : "rounded-none"
+              }`}
           ></div>
         </div>
         <Link
@@ -114,9 +114,8 @@ const Nav = () => {
         </Link>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "categories" ? "rounded-se-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "categories" ? "rounded-se-md" : "rounded-none"
+              }`}
           ></div>
         </div>
       </div>
@@ -124,9 +123,8 @@ const Nav = () => {
       <div>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "orders" ? "rounded-ee-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "orders" ? "rounded-ee-md" : "rounded-none"
+              }`}
           ></div>
         </div>
         <Link
@@ -151,9 +149,8 @@ const Nav = () => {
         </Link>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "orders" ? "rounded-se-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "orders" ? "rounded-se-md" : "rounded-none"
+              }`}
           ></div>
         </div>
       </div>
@@ -161,9 +158,8 @@ const Nav = () => {
       <div>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "settings" ? "rounded-ee-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "settings" ? "rounded-ee-md" : "rounded-none"
+              }`}
           ></div>
         </div>
         <Link
@@ -193,18 +189,12 @@ const Nav = () => {
         </Link>
         <div className="bg-white content-[''] h-1">
           <div
-            className={`w-full bg-blue-600 content-[''] h-full ${
-              currentPath === "settings" ? "rounded-se-md" : "rounded-none"
-            }`}
+            className={`w-full bg-blue-600 content-[''] h-full ${currentPath === "settings" ? "rounded-se-md" : "rounded-none"
+              }`}
           ></div>
         </div>
       </div>
-      <button
-        className={inActiveLink}
-        onClick={() => {
-          console.log("logging...out..");
-        }}
-      >
+      <button className={inActiveLink + " cursor-pointer"} onClick={logout}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
