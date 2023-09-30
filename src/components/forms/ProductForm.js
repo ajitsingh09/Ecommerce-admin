@@ -115,7 +115,7 @@ export default function ProductForm({
     propertiesToFill.push(...catInfo.properties);
     while (catInfo?.parent?._id) {
       const parentCat = categories.find(
-        ({ _id }) => _id === catInfo?.parent?._id
+        ({ _id }) => _id === catInfo?.parent?._id,
       );
       propertiesToFill.push(...parentCat.properties);
       catInfo = parentCat;
@@ -196,6 +196,7 @@ export default function ProductForm({
           <div>Add image</div>
           <input
             type="file"
+            multiple
             onChange={handleUploadImages}
             className="opacity-0 top-0 absolute w-24 h-24 z-20 "
           />

@@ -25,13 +25,14 @@ export default async function handler(req, res) {
       price,
       images,
       category,
-      properties
+      properties,
     });
     res.json(true);
   }
 
   if (method === "PUT") {
-    const { name, description, price, _id, images, category, properties } = req.body;
+    const { name, description, price, _id, images, category, properties } =
+      req.body;
     await Product.updateOne(
       { _id },
       {
@@ -40,7 +41,7 @@ export default async function handler(req, res) {
         price,
         images,
         category,
-        properties
+        properties,
       },
     );
     res.json(true);

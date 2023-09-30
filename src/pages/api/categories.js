@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         name,
         parent: parent || undefined,
         properties,
-      }
+      },
     );
     const result = await Category.find().populate("parent");
     res.json({ success: true, result });

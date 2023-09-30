@@ -35,7 +35,7 @@ export default async function handler(req, res) {
           Body: fs.readFileSync(file.path),
           ACL: "public-read",
           ContentType: mime.lookup(file.path),
-        })
+        }),
       );
       const link = `https://${BUCKETNAME}.s3.amazonaws.com/${newfilename}`;
       links.push(link);
