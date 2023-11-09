@@ -1,4 +1,4 @@
-import { Category } from "@/modals/Category";
+import { Category } from "@/models/Category";
 import { mongooseConnect } from "@/lib/mongoose";
 import { isAdminRequest } from "./auth/[...nextauth]";
 
